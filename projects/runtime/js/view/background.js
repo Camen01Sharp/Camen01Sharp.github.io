@@ -38,20 +38,33 @@ var background = function (window) {
             var backgroundFill = draw.rect(canvasWidth,canvasHeight, "black");
             background.addChild(backgroundFill);
             
-            // TODO: 3 - Add a moon and starfield
-                  var circle;
-            for(var i=0;i<50;i++) {
-                 circle = draw.circle(10,'white','LightGray',2);
-                 circle.x = canvasWidth*Math.random();
-                 circle.y = groundY*Math.random();
-                 background.addChild(circle);
-            }
-             var moon = draw.bitmap('img/moon.png');
-            moon.x = 300;
-            moon.y = 25;
-            moon.scaleX = 1.0;
-            moon.scaleY = 1.0;
-            background.addChild(moon);
+            var backgroundImage = draw.bitmap('img/portalBackground.png');
+            background.addChild(backgroundImage);
+            
+            backgroundImage.x = 0;
+            backgroundImage.y = 0;
+            
+            var backgroundImageWidth = 1366;
+            var backgroundImageHeight = 768;
+            
+            backgroundImage.scaleX = canvasWidth / backgroundImageWidth;
+            backgroundImage.scaleY = canvasHeight / backgroundImageHeight;
+            // var circle;
+            //      for(var i=0;i<50;i++) {
+            //      circle = draw.circle(10,'white','LightGray',2);
+            //      circle.x = canvasWidth*Math.random();
+            //      circle.y = groundY*Math.random();
+            //      background.addChild(circle);
+            
+            // // TODO: 3 - Add a moon and starfield
+                  
+            // }
+             var GLADOS = draw.bitmap('img/GLADOS.png');
+            GLADOS.x = 1050;
+            GLADOS.y = 0;
+            GLADOS.scaleX = 1.0;
+            GLADOS.scaleY = 1.0;
+            background.addChild(GLADOS);
              
             // TODO: 5 - Add buildings!     Q: This is before TODO 4 for a reason! Why?
             var buildingHeight = 300;
@@ -65,11 +78,7 @@ var background = function (window) {
             }
             
             // TODO 4: Part 1 - Add a tree
-            tree = draw.bitmap('img/tree.png');
-            tree.x = 0;
-            tree.y = 0;
-            background.addChild(tree);
-        } 
+        }   //We took out the tree, but we made it work.
         
         // Perform background animation
         // called on each timer "tick" - 60 times per second
@@ -80,10 +89,6 @@ var background = function (window) {
             var groundY = ground.y;
             
             // TODO 4: Part 2 - Move the tree!
-            tree.x = tree.x - 1;
-            if(tree.x < -200) {
-            tree.x = canvasWidth;
-            }
             
             // TODO 5: Part 2 - Parallax
             

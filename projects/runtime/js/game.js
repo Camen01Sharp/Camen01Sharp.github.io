@@ -113,7 +113,7 @@
                for the first time 
              */
             body.onProjectileCollision = function(self) {
-
+                console.log("Halle shot the enemy!");
             }
 
             /* Called when this game item hits the Halle the first time */

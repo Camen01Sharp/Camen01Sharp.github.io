@@ -17,10 +17,22 @@ var level01 = function(window) {
             speed: -3,
             gameItems: [
                 { type: 'sawblade', x: 400, y: 200 }, //top//
-                { type: 'sawblade', x: 600, y: 300 }, //floor//
-                { type: 'sawblade', x: 1000, y: 235 }, //middle//
+                { type: 'sawblade', x: 600, y: 200 }, //floor//
+                { type: 'sawblade', x: 1000, y: 200 }, //middle//
                 { type: 'portalCube', x: 500, y: groundY },
-                { type: 'enemy', x: 450, y: groundY },
+                { type: 'portalCube', x: 1000, y: groundY },
+                { type: 'portalCube', x: 1500, y: groundY },
+                { type: 'portalCube', x: 2000, y: groundY },
+                { type: 'wheatley', x: 600, y: 250},
+                { type: 'wheatley', x: 1000, y: 250},
+                { type: 'wheatley', x: 666, y: 250}, //demon//
+                { type: 'turret', x: 2500, y: 250 },
+                { type: 'turret', x: 2000, y: 250 },
+                { type: 'turret', x: 1000, y: 250},
+                { type: 'turret', x: 1500, y: 250},
+                { type: 'turret', x: 3000, y: 250},
+                { type: 'turret', x: 3500, y: 250},
+                
             ]
         };
         window.levelData = levelData;
@@ -35,10 +47,12 @@ var level01 = function(window) {
             if (type === 'sawblade') {
                 createSawBlade(x, y);
             }
-            else if (type === 'enemy'){
-                createEnemy(x, y);
+            else if (type === 'wheatley'){
+                createWheatley(x, y);
+            } 
+            else if (type === 'turret') {
+                createTurret(x, y); 
             }
-            
             else {
                 createPortalCube(x, y);
             }
@@ -61,31 +75,76 @@ var level01 = function(window) {
 
         function createPortalCube(x, y) {
             var hitZoneSize = 25;
-            var healingFromObstacle = -10;
-            var myObstacle = game.createObstacle(hitZoneSize, healingFromObstacle);
-            myObstacle.x = x;
-            myObstacle.y = y;
-            game.addGameItem(myObstacle);
+            
+            var portalCube = game.createGameItem('reward', hitZoneSize);
+            portalCube.x = x;
+            portalCube.y = y;
+            game.addGameItem(portalCube);
+            portalCube.velocityX = -1;
+            
             var obstacleImage = draw.bitmap('img/PortalCube.png');
-            myObstacle.addChild(obstacleImage);
+            portalCube.addChild(obstacleImage);
             obstacleImage.x = -25;
             obstacleImage.y = -25;
-
-        }
-        function createEnemy(x,y) {
-            var enemy =  game.createGameItem('enemy',25);
-            var redSquare = draw.rect(50,50,'red');
-            redSquare.x = -25;
-            redSquare.y = -25;
-            enemy.addChild(redSquare);
-            enemy.x = 400;
-            enemy.y = groundY-50;
-            game.addGameItem(enemy);
-            enemy.velocityX = -1;
-            enemy.onPlayerCollision = function() {
-                console.log('The enemy has hit Halle');
-                //make enemy damage
+            
+            portalCube.onPlayerCollision = function() {
+                console.log('Halle has picked up portal cube');
+                game.changeIntegrity(10);
+                portalCube.fadeOut();
             };
+
+        } //awknowledge me// Nein, dummkopf
+        function createWheatley(x,y) {
+            var hitZoneSize = 50;
+            var damageFromObstacle = 10;
+            
+            var wheatley = game.createGameItem('wheatley',25);
+            wheatley.x = x;
+            wheatley.y = y;
+            game.addGameItem(wheatley);
+            wheatley.velocityX = -1;
+            
+            var wheatleyImage = draw.bitmap('img/Wheatley.png');
+            wheatleyImage.x = -25;
+            wheatleyImage.y = -25;
+            wheatley.addChild(wheatleyImage);
+            
+            wheatley.onPlayerCollision = function() {
+                console.log('Wheatley is a traitor');
+                game.changeIntegrity(-10);
+            };
+              
+            wheatley.onProjectileCollision = function() {
+                game.increaseScore(100);
+                wheatley.fadeOut();
+            };
+            
+            
+          } 
+            function createTurret(x, y) {
+                var hitZoneSize = 50;
+                var damageFromObstacle = 10;
+                
+                var turret = game.createObstacle(hitZoneSize, damageFromObstacle);
+                turret.x = x;
+                turret.y = y;
+                game.addGameItem(turret);
+                
+                var obstacleImage = draw.bitmap('img/turret.png');
+                turret.addChild(obstacleImage);
+                obstacleImage.x = -75;
+                obstacleImage.y = -75;
+                
+                turret.onPlayerCollision = function() {
+                    console.log('The turret has hit Halle');
+                    game.changeIntegrity(-10);
+                    
+                };
+                
+                turret.onProjectileCollision = function() {
+                    game.increaseScore(100);
+                    turret.fadeOut();
+                };
         } 
         
         // DO NOT CODE BELOW HERE
